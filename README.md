@@ -45,11 +45,25 @@ jobs:
 
 The following [Screwdriver CD Secrets] needs to be defined before running this template:
 
-- [**AWS_ACCESS_KEY_ID**](https://qubitpi.github.io/hashicorp-aws/docs/setup#aws)
-- [**AWS_SECRET_ACCESS_KEY**](https://qubitpi.github.io/hashicorp-aws/docs/setup#aws)
-- **AWS_ELK_PKRVARS_HCL** - The [Packer Variables][HashiCorp Packer Variables] all in one [Screwdriver Secret]
+- [`AWS_ACCESS_KEY_ID`](https://qubitpi.github.io/hashicorp-aws/docs/setup#aws)
+- [`AWS_SECRET_ACCESS_KEY`](https://qubitpi.github.io/hashicorp-aws/docs/setup#aws)
+- `AWS_ELK_PKRVARS_HCL` - The [Packer Variables][HashiCorp Packer Variables] all in one [Screwdriver Secret]
   [Screwdriver CD Secrets]
-- **AWS_ELK_TFVARS** - The [Terraform Variables][HashiCorp Terraform Variables] all in one [Screwdriver Secret]
+
+  > [!CAUTION]
+  > The **ssl_cert_file_path**, **ssl_cert_key_file_path**, and **ssl_nginx_config_file_path** needs to be either 
+  > absolute or relative to the `~/hashicorp-aws/hashicorp/elk/images` directory in Screwdriver's executor machine. The
+  > recommended values for them are
+  >
+  > ```hcl
+  > ssl_cert_file_path         = "server.crt"
+  > ssl_cert_key_file_path     = "server.key"
+  > ssl_nginx_config_file_path = "nginx-ssl.conf"
+  > ```
+  >
+  > which simply puts the files under the `hashicorp-aws/hashicorp/elk/images` directory
+
+- `AWS_ELK_TFVARS` - The [Terraform Variables][HashiCorp Terraform Variables] all in one [Screwdriver Secret]
   [Screwdriver CD Secrets]
 
 License

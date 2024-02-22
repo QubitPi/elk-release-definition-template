@@ -15,15 +15,15 @@
 shared:
   image: node:18
 jobs:
-  main-mlflow-docker:
+  main-elk:
     requires: [~pr, ~commit]
     steps:
       - install: npm install -g screwdriver-template-main
       - validate: template-validate
     environment:
       SD_TEMPLATE_PATH: templates/sd-template.yaml
-  publish-mlflow-docker:
-    requires: main-mlflow-docker
+  publish-elk:
+    requires: main-elk
     steps:
       - install: npm install -g screwdriver-template-main
       - publish: template-publish --tag latest
