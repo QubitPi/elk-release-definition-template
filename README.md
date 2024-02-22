@@ -7,8 +7,8 @@ ELK Release Definition Template
 [![Apache License badge]][Apache License URL]
 [![GitHub Workflow Status][GitHub Workflow Status badge]][GitHub Workflow Status URL]
 
-A [Screwdriver CD template] that deploys [immutable][Immutable Infrastructure] instances of ELK to AWS. It uses the 
-[screwdriver-template-main npm package] to assist with template validation, publishing, and tagging. The template tags 
+A [Screwdriver CD template] that deploys [immutable][Immutable Infrastructure] instances of ELK to AWS. It uses the
+[screwdriver-template-main npm package] to assist with template validation, publishing, and tagging. The template tags
 the latest versions with the `latest` tag.
 
 > [!TIP]
@@ -20,7 +20,7 @@ How to Use the Templates
 ------------------------
 
 > [!TIP]
-> Before preceding, please note that it is assumed [the template](./templates/sd-template.yaml) have already been 
+> Before preceding, please note that it is assumed [the template](./templates/sd-template.yaml) have already been
 > installed in Screwdriver. If not, please see documentation on [publishing a template in Screwdriver]
 
 ### The Example
@@ -38,6 +38,9 @@ jobs:
       - ...
     secrets:
       - AWS_ELK_PKRVARS_HCL
+      - SSL_CERTIFICATE
+      - SSL_CERTIFICATE_KEY
+      - AWS_ELK_PKRVARS_HCL
       - AWS_ELK_TFVARS
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
@@ -47,24 +50,22 @@ The following [Screwdriver CD Secrets] needs to be defined before running this t
 
 - [`AWS_ACCESS_KEY_ID`](https://qubitpi.github.io/hashicorp-aws/docs/setup#aws)
 - [`AWS_SECRET_ACCESS_KEY`](https://qubitpi.github.io/hashicorp-aws/docs/setup#aws)
-- `AWS_ELK_PKRVARS_HCL` - The [Packer Variables][HashiCorp Packer Variables] all in one [Screwdriver Secret]
-  [Screwdriver CD Secrets]
+- `SSL_CERTIFICATE` - the content of SSL certificate file serving HTTPS-enabled DNS name of the EC2 hosting our ELK
+  instance. This is the same as the `SSL_CERTIFICATE` from the [general SSL setup of hashicorp-aws]
+- `SSL_CERTIFICATE_KEY` - the content of SSL certificate key file serving HTTPS-enabled DNS name of the EC2 hosting our
+  ELK instance. This is the same as the `SSL_CERTIFICATE_KEY` from the [general SSL setup of hashicorp-aws]
+- `NGINX_SSL_CONFIG_FILE` - the content of Nginx config file serving as the reverse proxy for the aforementioned
+  SSL/HTTPS support
+- `AWS_ELK_PKRVARS_HCL` - The [Packer Variables][HashiCorp Packer Variables] all in one
+  [Screwdriver Secret][Screwdriver CD Secrets]
 
-  > [!CAUTION]
-  > The **ssl_cert_file_path**, **ssl_cert_key_file_path**, and **ssl_nginx_config_file_path** needs to be either 
-  > absolute or relative to the `~/hashicorp-aws/hashicorp/elk/images` directory in Screwdriver's executor machine. The
-  > recommended values for them are
-  >
-  > ```hcl
-  > ssl_cert_file_path         = "server.crt"
-  > ssl_cert_key_file_path     = "server.key"
-  > ssl_nginx_config_file_path = "nginx-ssl.conf"
-  > ```
-  >
-  > which simply puts the files under the `hashicorp-aws/hashicorp/elk/images` directory
+> [!CAUTION]
+> We do not need to specify **ssl_cert_file_path**, **ssl_cert_key_file_path**, or **ssl_nginx_config_file_path** in
+> this template, which will automatically load `SSL_CERTIFICATE`, `SSL_CERTIFICATE_KEY`, and `NGINX_SSL_CONFIG_FILE` and
+> inject their proper locations into the "Packer Variables" list
 
-- `AWS_ELK_TFVARS` - The [Terraform Variables][HashiCorp Terraform Variables] all in one [Screwdriver Secret]
-  [Screwdriver CD Secrets]
+- `AWS_ELK_TFVARS` - The [Terraform Variables][HashiCorp Terraform Variables] all in one
+  [Screwdriver Secret][Screwdriver CD Secrets]
 
 License
 -------
@@ -89,6 +90,7 @@ The use and distribution terms for [Machine Learning model release definition te
 [dedicated page for ELK deployment support]: https://qubitpi.github.io/hashicorp-aws/docs/elk
 [elk-release-definition-template]: https://github.com/QubitPi/elk-release-definition-template
 
+[general SSL setup of hashicorp-aws]: https://qubitpi.github.io/hashicorp-aws/docs/setup#ssl
 [GitHub Workflow Status badge]: https://img.shields.io/github/actions/workflow/status/QubitPi/screwdriver-cd-template/ci-cd.yml?branch=master&logo=github&style=for-the-badge
 [GitHub Workflow Status URL]: https://github.com/QubitPi/screwdriver-cd-template/actions/workflows/ci-cd.yml
 
