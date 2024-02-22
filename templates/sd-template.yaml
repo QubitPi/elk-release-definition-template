@@ -27,7 +27,7 @@ config:
     - load-packer-variable-file: echo "$AWS_ELK_PKRVARS_HCL" > ../hashicorp-aws/hashicorp/elk/images/aws.auto.pkrvars.hcl
     - load-terraform-variable-file: echo "$AWS_ELK_TFVARS" > ../hashicorp-aws/hashicorp/elk/instances/aws.auto.tfvars
 
-    - packer-init: cd ../hashicorp-aws/hashicorp/... && packer init .
+    - packer-init: cd ../hashicorp-aws/hashicorp/elk/images && packer init .
     - packer-validate: packer validate -var "skip_create_ami=true" .
     - packer-build: packer build -var "skip_create_ami=false" .
 
