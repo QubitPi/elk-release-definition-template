@@ -47,8 +47,8 @@ The following [Screwdriver CD Secrets] needs to be defined before running this t
 
 - [`AWS_ACCESS_KEY_ID`](https://qubitpi.github.io/hashicorp-aws/docs/setup#aws)
 - [`AWS_SECRET_ACCESS_KEY`](https://qubitpi.github.io/hashicorp-aws/docs/setup#aws)
-- `AWS_ELK_PKRVARS_HCL` - The [Packer Variables][HashiCorp Packer Variables] all in one [Screwdriver Secret]
-  [Screwdriver CD Secrets]
+- `AWS_ELK_PKRVARS_HCL` - The [Packer Variables][HashiCorp Packer Variables] all in one
+  [Screwdriver Secret][Screwdriver CD Secrets]
 
 > [!CAUTION]
 > The **ssl_cert_file_path**, **ssl_cert_key_file_path**, and **ssl_nginx_config_file_path** needs to be either 
