@@ -50,18 +50,18 @@ The following [Screwdriver CD Secrets] needs to be defined before running this t
 - `AWS_ELK_PKRVARS_HCL` - The [Packer Variables][HashiCorp Packer Variables] all in one [Screwdriver Secret]
   [Screwdriver CD Secrets]
 
-  > [!CAUTION]
-  > The **ssl_cert_file_path**, **ssl_cert_key_file_path**, and **ssl_nginx_config_file_path** needs to be either 
-  > absolute or relative to the `~/hashicorp-aws/hashicorp/elk/images` directory in Screwdriver's executor machine. The
-  > recommended values for them are
-  >
-  > ```hcl
-  > ssl_cert_file_path         = "server.crt"
-  > ssl_cert_key_file_path     = "server.key"
-  > ssl_nginx_config_file_path = "nginx-ssl.conf"
-  > ```
-  >
-  > which simply puts the files under the `hashicorp-aws/hashicorp/elk/images` directory
+    > [!CAUTION]
+    > The **ssl_cert_file_path**, **ssl_cert_key_file_path**, and **ssl_nginx_config_file_path** needs to be either 
+    > absolute or relative to the `~/hashicorp-aws/hashicorp/elk/images` directory in Screwdriver's executor machine. The
+    > recommended values for them are
+    >
+    > ```hcl
+    > ssl_cert_file_path         = "server.crt"
+    > ssl_cert_key_file_path     = "server.key"
+    > ssl_nginx_config_file_path = "nginx-ssl.conf"
+    > ```
+    >
+    > which simply puts the files under the `hashicorp-aws/hashicorp/elk/images` directory
 
 - `AWS_ELK_TFVARS` - The [Terraform Variables][HashiCorp Terraform Variables] all in one [Screwdriver Secret]
   [Screwdriver CD Secrets]
