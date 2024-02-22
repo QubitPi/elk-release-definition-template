@@ -21,11 +21,11 @@ jobs:
       - install: npm install -g screwdriver-template-main
       - validate: template-validate
     environment:
-      SD_TEMPLATE_PATH: templates/example.yaml
+      SD_TEMPLATE_PATH: templates/sd-template.yaml
   publish-mlflow-docker:
     requires: main-mlflow-docker
     steps:
       - install: npm install -g screwdriver-template-main
       - publish: template-publish --tag latest
     environment:
-      SD_TEMPLATE_PATH: templates/example.yaml
+      SD_TEMPLATE_PATH: templates/sd-template.yaml

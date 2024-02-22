@@ -1,4 +1,4 @@
-Screwdriver CD Template Example
+ELK Release Definition Template
 ===============================
 
 [![Screwdriver CD badge][Screwdriver CD badge]][Screwdriver CD URL]
@@ -7,26 +7,21 @@ Screwdriver CD Template Example
 [![Apache License badge]][Apache License URL]
 [![GitHub Workflow Status][GitHub Workflow Status badge]][GitHub Workflow Status URL]
 
-A [Screwdriver CD template] that deploys [immutable][Immutable Infrastructure] instances of application to AWS. It uses 
-the [screwdriver-template-main npm package] to assist with template validation, publishing, and tagging.
-
-This release definition contains the following templates:
-
-- [An example](templates/example.yaml)
-
-All templates tag the latest versions with the `latest` tag.
+A [Screwdriver CD template] that deploys [immutable][Immutable Infrastructure] instances of ELK to AWS. It uses the 
+[screwdriver-template-main npm package] to assist with template validation, publishing, and tagging. The template tags 
+the latest versions with the `latest` tag.
 
 > [!TIP]
-> [screwdriver-cd-template] is a satellite project of [hashicorp-aws] and more documentation can be found in its
-> [dedicated page for ...]
+> [ELK Release Definition Template][elk-release-definition-template] is a satellite project of [hashicorp-aws] and more
+> documentation can be found in its [dedicated page for ELK deployment support]
 > <img src="https://github.com/QubitPi/QubitPi/blob/master/img/8%E5%A5%BD.gif?raw=true" height="40px"/>
 
 How to Use the Templates
 ------------------------
 
 > [!TIP]
-> Before preceding, please note that it is assumed [all templates](./templates) have already been installed in
-> Screwdriver. If not, please see documentation on [publishing a template in Screwdriver]
+> Before preceding, please note that it is assumed [the template](./templates/sd-template.yaml) have already been 
+> installed in Screwdriver. If not, please see documentation on [publishing a template in Screwdriver]
 
 ### The Example
 
@@ -38,47 +33,24 @@ contents:
 jobs:
   main:
     requires: [~pr, ~commit]
-    template: QubitPi/screwdriver-cd-template@latest
+    template: QubitPi/elk-release-definition-template@latest
     steps:
       - ...
     secrets:
-      - AWS_PKRVARS_HCL
-      - AWS_TFVARS
+      - AWS_ELK_PKRVARS_HCL
+      - AWS_ELK_TFVARS
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
 ```
 
-The following [Screwdriver Secrets] needs to be defined before running this template:
+The following [Screwdriver CD Secrets] needs to be defined before running this template:
 
 - [**AWS_ACCESS_KEY_ID**](https://qubitpi.github.io/hashicorp-aws/docs/setup#aws)
 - [**AWS_SECRET_ACCESS_KEY**](https://qubitpi.github.io/hashicorp-aws/docs/setup#aws)
-- **AWS_PKRVARS_HCL** - A [HashiCorp Packer variable values file] with the following variable values:
-
-  ```hcl
-  aws_image_region = "us-east-2"
-  ami_name         = "my-ami"
-  instance_type    = "t2.small"
-  ```
-
-  - `aws_image_region` is the [image region][AWS regions] of [AWS AMI]
-  - `ami_name` is the published AMI name; it can be arbitrary
-  - `instance_type` is the recommended [AWS EC2 instance type] running this image
-
-- **AWS_TFVARS** - A [HashiCorp Terraform variable values file] with the following variable values:
-
-  ```hcl
-  aws_deploy_region   = "us-east-2"
-  ami_name            = "my-ami"
-  instance_type       = "t2.small"
-  ec2_instance_name   = "My Instance"
-  ec2_security_groups = ["My Security Group"]
-  ```
-
-    - `aws_deploy_region` is the [EC2 runtime region][AWS regions]
-    - `ami_name` is the name of the published AMI; **it must be the same as the `ami_name` in AWS_PKRVARS_HCL**
-    - `instance_type` is the chosen [AWS EC2 instance type] at runtime
-    - `ec2_instance_name` is the deployed EC2 name as appeared in the instance list of AWS console; it can be arbitrary
-    - `ec2_security_groups` is the [AWS Security Group] _name_ (yes, not ID, but name...)
+- **AWS_ELK_PKRVARS_HCL** - The [Packer Variables][HashiCorp Packer Variables] all in one [Screwdriver Secret]
+  [Screwdriver CD Secrets]
+- **AWS_ELK_TFVARS** - The [Terraform Variables][HashiCorp Terraform Variables] all in one [Screwdriver Secret]
+  [Screwdriver CD Secrets]
 
 License
 -------
@@ -100,16 +72,19 @@ The use and distribution terms for [Machine Learning model release definition te
 [AWS regions]: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html#Concepts.RegionsAndAvailabilityZones.Availability
 [AWS Security Group]: https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html
 
+[dedicated page for ELK deployment support]: https://qubitpi.github.io/hashicorp-aws/docs/elk
+[elk-release-definition-template]: https://github.com/QubitPi/elk-release-definition-template
+
 [GitHub Workflow Status badge]: https://img.shields.io/github/actions/workflow/status/QubitPi/screwdriver-cd-template/ci-cd.yml?branch=master&logo=github&style=for-the-badge
 [GitHub Workflow Status URL]: https://github.com/QubitPi/screwdriver-cd-template/actions/workflows/ci-cd.yml
 
 [hashicorp-aws]: https://qubitpi.github.io/hashicorp-aws/
 [HashiCorp Packer badge]: https://img.shields.io/badge/Packer-02A8EF?style=for-the-badge&logo=Packer&logoColor=white
 [HashiCorp Packer URL]: https://qubitpi.github.io/hashicorp-packer/packer/docs
-[HashiCorp Packer variable values file]: https://qubitpi.github.io/hashicorp-packer/packer/guides/hcl/variables#from-a-file
+[HashiCorp Packer Variables]: https://qubitpi.github.io/hashicorp-aws/docs/elk#defining-packer-variables
 [HashiCorp Terraform badge]: https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white
 [HashiCorp Terraform URL]: https://qubitpi.github.io/hashicorp-terraform/terraform/docs
-[HashiCorp Terraform variable values file]: https://qubitpi.github.io/hashicorp-terraform/terraform/language/values/variables#variable-definitions-tfvars-files
+[HashiCorp Terraform Variables]: https://qubitpi.github.io/hashicorp-aws/docs/elk#defining-terraform-variables
 
 [Immutable Infrastructure]: https://www.hashicorp.com/resources/what-is-mutable-vs-immutable-infrastructure
 
@@ -117,6 +92,7 @@ The use and distribution terms for [Machine Learning model release definition te
 
 [screwdriver-template-main npm package]: https://github.com/QubitPi/screwdriver-cd-template-main
 [Screwdriver - create pipeline from template]: https://qubitpi.github.io/screwdriver-cd-guide/user-guide/templates#using-a-template
+[Screwdriver CD Secrets]: https://qubitpi.github.io/screwdriver-cd-guide/user-guide/configuration/secrets
 [Screwdriver CD template]: https://qubitpi.github.io/screwdriver-cd-guide/user-guide/templates
-[Screwdriver CD badge]: https://img.shields.io/badge/Screwdriver%20CD-1475BB?style=for-the-badge&logo=data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBVcGxvYWRlZCB0bzogU1ZHIFJlcG8sIHd3dy5zdmdyZXBvLmNvbSwgR2VuZXJhdG9yOiBTVkcgUmVwbyBNaXhlciBUb29scyAtLT4NCjxzdmcgaGVpZ2h0PSI4MDBweCIgd2lkdGg9IjgwMHB4IiB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiANCgkgdmlld0JveD0iMCAwIDUxMiA1MTIiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHBhdGggc3R5bGU9ImZpbGw6I2ZmZmZmZjsiIGQ9Ik01MDQuNzgzLDc3LjA5MWgtMC4wMDZIMzAzLjQ5NGMtMi4wMzYsMC0zLjk3NywwLjg1OS01LjM0NSwyLjM2Ng0KCWMtMS4zNjgsMS41MDgtMi4wMzgsMy41Mi0xLjg0Miw1LjU0OWwzLjkyNSw0MC42OTNjMC4zNDMsMy41NTIsMy4yMjgsNi4zMiw2Ljc5Miw2LjUxNmw0Mi4wNSwyLjMxNGwtODAuNzM2LDExMi4wMjNMMTgwLjI5Myw3MS4xNDINCglsNjMuNTYzLTIuNDNjMy44NDQtMC4xNDYsNi44OTYtMy4yNzYsNi45NDUtNy4xMjFsMC40NjQtMzYuMzkyYzAuMDIyLTEuOTMyLTAuNzI2LTMuNzkyLTIuMDgyLTUuMTY2DQoJYy0xLjM1Ni0xLjM3Mi0zLjIwNi0yLjE0Ny01LjEzNy0yLjE0N0g3LjIyYy0zLjk4OSwwLTcuMjIsMy4yMzEtNy4yMiw3LjIyMXY0MC41NThjMCwzLjk0NywzLjE3LDcuMTYzLDcuMTE1LDcuMjJsNjYuOTE3LDAuOTY0DQoJbDEyNy4yNTcsMjI0LjQ4OGwtMC41NjgsMTQwLjIwNWwtODguNDgsMy42MzFjLTMuODE3LDAuMTU1LTYuODUsMy4yNTktNi45MjMsNy4wNzdsLTAuNzE2LDM3LjUwNg0KCWMtMC4wMzcsMS45MzksMC43MDksMy44MSwyLjA2OSw1LjE5NmMxLjM1NiwxLjM4MywzLjIxMiwyLjE2MSw1LjE1MSwyLjE2MWgyNzYuNzYyYzEuOTgxLDAsMy44NzUtMC44MTMsNS4yMzktMi4yNDkNCgljMS4zNjMtMS40MzUsMi4wNzgtMy4zNjgsMS45NzQtNS4zNDZsLTEuOTMzLTM3LjEzMmMtMC4xOTItMy42OTItMy4xNC02LjY0MS02LjgzNS02LjgzNGwtNzYuMTI0LTMuOTkybC0xMS4wODItMTM2LjU3DQoJTDQzNi40NzksMTM3LjMzbDU1LjY0LTIuNTNjMy4wNjMtMC4xNDIsNS43MDQtMi4yMDIsNi41ODctNS4xMzlsMTIuOTA5LTQzLjAxOGMwLjI0OC0wLjcyOSwwLjM4NS0xLjUxNiwwLjM4NS0yLjMzMg0KCUM1MTIsODAuMzI1LDUwOC43NzIsNzcuMDkxLDUwNC43ODMsNzcuMDkxeiIvPg0KPC9zdmc+
 [Screwdriver CD URL]: https://qubitpi.github.io/screwdriver-cd-homepage/
+[Screwdriver CD badge]: https://img.shields.io/badge/Screwdriver%20CD-1475BB?style=for-the-badge&logo=data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBVcGxvYWRlZCB0bzogU1ZHIFJlcG8sIHd3dy5zdmdyZXBvLmNvbSwgR2VuZXJhdG9yOiBTVkcgUmVwbyBNaXhlciBUb29scyAtLT4NCjxzdmcgaGVpZ2h0PSI4MDBweCIgd2lkdGg9IjgwMHB4IiB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiANCgkgdmlld0JveD0iMCAwIDUxMiA1MTIiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHBhdGggc3R5bGU9ImZpbGw6I2ZmZmZmZjsiIGQ9Ik01MDQuNzgzLDc3LjA5MWgtMC4wMDZIMzAzLjQ5NGMtMi4wMzYsMC0zLjk3NywwLjg1OS01LjM0NSwyLjM2Ng0KCWMtMS4zNjgsMS41MDgtMi4wMzgsMy41Mi0xLjg0Miw1LjU0OWwzLjkyNSw0MC42OTNjMC4zNDMsMy41NTIsMy4yMjgsNi4zMiw2Ljc5Miw2LjUxNmw0Mi4wNSwyLjMxNGwtODAuNzM2LDExMi4wMjNMMTgwLjI5Myw3MS4xNDINCglsNjMuNTYzLTIuNDNjMy44NDQtMC4xNDYsNi44OTYtMy4yNzYsNi45NDUtNy4xMjFsMC40NjQtMzYuMzkyYzAuMDIyLTEuOTMyLTAuNzI2LTMuNzkyLTIuMDgyLTUuMTY2DQoJYy0xLjM1Ni0xLjM3Mi0zLjIwNi0yLjE0Ny01LjEzNy0yLjE0N0g3LjIyYy0zLjk4OSwwLTcuMjIsMy4yMzEtNy4yMiw3LjIyMXY0MC41NThjMCwzLjk0NywzLjE3LDcuMTYzLDcuMTE1LDcuMjJsNjYuOTE3LDAuOTY0DQoJbDEyNy4yNTcsMjI0LjQ4OGwtMC41NjgsMTQwLjIwNWwtODguNDgsMy42MzFjLTMuODE3LDAuMTU1LTYuODUsMy4yNTktNi45MjMsNy4wNzdsLTAuNzE2LDM3LjUwNg0KCWMtMC4wMzcsMS45MzksMC43MDksMy44MSwyLjA2OSw1LjE5NmMxLjM1NiwxLjM4MywzLjIxMiwyLjE2MSw1LjE1MSwyLjE2MWgyNzYuNzYyYzEuOTgxLDAsMy44NzUtMC44MTMsNS4yMzktMi4yNDkNCgljMS4zNjMtMS40MzUsMi4wNzgtMy4zNjgsMS45NzQtNS4zNDZsLTEuOTMzLTM3LjEzMmMtMC4xOTItMy42OTItMy4xNC02LjY0MS02LjgzNS02LjgzNGwtNzYuMTI0LTMuOTkybC0xMS4wODItMTM2LjU3DQoJTDQzNi40NzksMTM3LjMzbDU1LjY0LTIuNTNjMy4wNjMtMC4xNDIsNS43MDQtMi4yMDIsNi41ODctNS4xMzlsMTIuOTA5LTQzLjAxOGMwLjI0OC0wLjcyOSwwLjM4NS0xLjUxNiwwLjM4NS0yLjMzMg0KCUM1MTIsODAuMzI1LDUwOC43NzIsNzcuMDkxLDUwNC43ODMsNzcuMDkxeiIvPg0KPC9zdmc+
