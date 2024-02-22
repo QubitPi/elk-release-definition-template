@@ -13,9 +13,9 @@
 # limitations under the License.
 ---
 namespace: QubitPi
-name: screwdriver-cd-template
+name: elk-release-definition-template
 version: '1.0.0'
-description: Please modify this field and the name field above
+description: Screwdriver CD template for deploying ELK to AWS through HashiCorp.
 maintainer: jack20220723@gmail.com
 config:
   image: buildpack-deps:22.04-scm
@@ -24,18 +24,18 @@ config:
     - install-terraform: sd-cmd exec QubitPi/install-hashicorp-terraform-ubuntu@latest
 
     - setup-hashicorp-deployment-tool: git clone --depth 1 https://github.com/QubitPi/hashicorp-aws.git ../hashicorp-aws
-    - load-packer-variable-file: echo "$AWS_PKRVARS_HCL" > ../hashicorp-aws/hashicorp/.../aws.auto.pkrvars.hcl
-    - load-terraform-variable-file: echo "$AWS_TFVARS" > ../hashicorp-aws/hashicorp/.../aws.auto.tfvars
+    - load-packer-variable-file: echo "$AWS_ELK_PKRVARS_HCL" > ../hashicorp-aws/hashicorp/elk/images/aws.auto.pkrvars.hcl
+    - load-terraform-variable-file: echo "$AWS_ELK_TFVARS" > ../hashicorp-aws/hashicorp/elk/instances/aws.auto.tfvars
 
     - packer-init: cd ../hashicorp-aws/hashicorp/... && packer init .
     - packer-validate: packer validate -var "skip_create_ami=true" .
     - packer-build: packer build -var "skip_create_ami=false" .
 
-    - terraform-init: cd ../../instances/... && terraform init
+    - terraform-init: cd ../instances && terraform init
     - terraform-validate: terraform validate
     - terraform-apply: terraform apply -auto-approve
   secrets:
-    - AWS_PKRVARS_HCL
-    - AWS_TFVARS
+    - AWS_ELK_PKRVARS_HCL
+    - AWS_ELK_TFVARS
     - AWS_ACCESS_KEY_ID
     - AWS_SECRET_ACCESS_KEY
