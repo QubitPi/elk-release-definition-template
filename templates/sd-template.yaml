@@ -30,8 +30,8 @@ config:
     - load-nginx-config-file: echo "$NGINX_SSL_CONFIG_FILE" > ../hashicorp-aws/hashicorp/elk/images/nginx-ssl.conf
 
     - load-packer-variable-file: echo "$AWS_ELK_PKRVARS_HCL" > ../hashicorp-aws/hashicorp/elk/images/aws.auto.pkrvars.hcl
-    - inject-ssl-certificate-file-location: echo 'ssl_cert_file_path = "server.crt"' >> ../hashicorp-aws/hashicorp/elk/images/aws.auto.pkrvars.hcl
-    - inject-ssl-certificate-key-file-location: echo 'ssl_cert_key_file_path = "server.key"' >> ../hashicorp-aws/hashicorp/elk/images/aws.auto.pkrvars.hcl
+    - inject-ssl-certificate-file-location: echo 'ssl_cert_file_path = "ssl.crt"' >> ../hashicorp-aws/hashicorp/elk/images/aws.auto.pkrvars.hcl
+    - inject-ssl-certificate-key-file-location: echo 'ssl_cert_key_file_path = "ssl.key"' >> ../hashicorp-aws/hashicorp/elk/images/aws.auto.pkrvars.hcl
     - inject-nginx-ssl-config-file-location: echo 'ssl_nginx_config_file_path = "nginx-ssl.conf"' >> ../hashicorp-aws/hashicorp/elk/images/aws.auto.pkrvars.hcl
 
     - load-terraform-variable-file: echo "$AWS_ELK_TFVARS" > ../hashicorp-aws/hashicorp/elk/instances/aws.auto.tfvars
