@@ -34,8 +34,6 @@ jobs:
   main:
     requires: [~pr, ~commit]
     template: QubitPi/elk-release-definition-template@latest
-    steps:
-      - ...
     secrets:
       - AWS_ELK_PKRVARS_HCL
       - SSL_CERTIFICATE
