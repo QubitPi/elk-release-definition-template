@@ -21,13 +21,13 @@ config:
   image: buildpack-deps:22.04-scm
   parameters:
     aws-image-region:
-      value: "us-east-2"
-      description: "The AWS regions where ELK AMI will be published to. The published image will be private"
+      value: ["us-east-1", "us-east-2", "us-west-1", "us-west-2"]
+      description: "The AWS region where ELK AMI will be published to. The published image will be private"
     ami-name:
       value: "my-elk-ami"
       description: "The published AMI name; it can be arbitrary"
     aws-deploy-region:
-      value: "us-east-1"
+      value: ["us-east-1", "us-east-2", "us-west-1", "us-west-2"]
       description: "The AWS region where ELK EC2 instance will be deployed into"
     instance-name:
       value: "My ELK instance"
