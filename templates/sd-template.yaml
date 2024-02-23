@@ -54,7 +54,7 @@ config:
 
     - load-ssl-certificate-file: echo "$SSL_CERTIFICATE" > ../hashicorp-aws/hashicorp/elk/images/ssl.crt
     - load-ssl-certificate-key-file: echo "$SSL_CERTIFICATE_KEY" > ../hashicorp-aws/hashicorp/elk/images/ssl.key
-    - load-nginx-config-file: echo "$NGINX_SSL_CONFIG_FILE" > ../hashicorp-aws/hashicorp/elk/images/nginx-ssl.conf
+    - configure-nginx-ssl: sed -i -e "s/elk.domain.com/$(meta get parameters.elk-domain.value)/g" ../hashicorp-aws/hashicorp/elk/images/nginx-ssl.conf
 
     - load-packer-variable-file: |
         echo aws_image_region           = \"$(meta get parameters.aws-image-region.value)\" >> ../hashicorp-aws/hashicorp/elk/images/aws.auto.pkrvars.hcl
@@ -82,6 +82,5 @@ config:
   secrets:
     - SSL_CERTIFICATE
     - SSL_CERTIFICATE_KEY
-    - NGINX_SSL_CONFIG_FILE
     - AWS_ACCESS_KEY_ID
     - AWS_SECRET_ACCESS_KEY
