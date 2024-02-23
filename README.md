@@ -23,10 +23,8 @@ How to Use the Templates
 > Before preceding, please note that it is assumed [the template](./templates/sd-template.yaml) have already been
 > installed in Screwdriver. If not, please see documentation on [publishing a template in Screwdriver]
 
-### The Example
-
-[Create a Screwdriver pipeline that uses this template][Screwdriver - create pipeline from template] with the following
-contents:
+[Create a Screwdriver pipeline that uses this template][Screwdriver - create pipeline from template] with the 
+`screwdriver.yaml` file of
 
 ```yaml
 ---
@@ -34,17 +32,9 @@ jobs:
   main:
     requires: [~pr, ~commit]
     template: QubitPi/elk-release-definition-template@latest
-    secrets:
-      - AWS_ELK_PKRVARS_HCL
-      - SSL_CERTIFICATE
-      - SSL_CERTIFICATE_KEY
-      - AWS_ELK_PKRVARS_HCL
-      - AWS_ELK_TFVARS
-      - AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY
 ```
 
-The following [Screwdriver CD Secrets] needs to be defined before running this template:
+The following [Screwdriver CD Secrets] needs to be defined before running the pipeline:
 
 - [`AWS_ACCESS_KEY_ID`](https://qubitpi.github.io/hashicorp-aws/docs/setup#aws)
 - [`AWS_SECRET_ACCESS_KEY`](https://qubitpi.github.io/hashicorp-aws/docs/setup#aws)
@@ -54,16 +44,46 @@ The following [Screwdriver CD Secrets] needs to be defined before running this t
   ELK instance. This is the same as the `SSL_CERTIFICATE_KEY` from the [general SSL setup of hashicorp-aws]
 - `NGINX_SSL_CONFIG_FILE` - the content of Nginx config file serving as the reverse proxy for the aforementioned
   SSL/HTTPS support
-- `AWS_ELK_PKRVARS_HCL` - The [Packer Variables][HashiCorp Packer Variables] all in one
-  [Screwdriver Secret][Screwdriver CD Secrets]
 
-> [!CAUTION]
-> We do not need to specify **ssl_cert_file_path**, **ssl_cert_key_file_path**, or **ssl_nginx_config_file_path** in
-> this template, which will automatically load `SSL_CERTIFICATE`, `SSL_CERTIFICATE_KEY`, and `NGINX_SSL_CONFIG_FILE` and
-> inject their proper locations into the "Packer Variables" list
+To run the pipeline, fill in the AWS-related **parameters** first
 
-- `AWS_ELK_TFVARS` - The [Terraform Variables][HashiCorp Terraform Variables] all in one
-  [Screwdriver Secret][Screwdriver CD Secrets]
+<div align="center">
+
+<img width="30%" src="https://github.com/QubitPi/QubitPi/blob/master/img/elk-release-definition-template-parameters.png?raw=true" />
+
+</div>
+
+Then hit "**Submit**" to start deploying.
+
+> [!IMPORTANT]
+> This template is the Screwdriver CD implementation of the
+> [general ELK deployment by hashicorp-aws framework][dedicated page for ELK deployment support]. Once the pipeline
+> deploys ELK, we must remember to do the
+> [post setup in EC2 instance](https://qubitpi.github.io/hashicorp-aws/docs/elk#post-setup-in-ec2-instance).
+> 
+> The password for user 'elastic' can be found _packer-build_ step logs. Here is an example:
+> 
+> ![elk deploy password](https://github.com/QubitPi/QubitPi/blob/master/img/elastic-password-from-log.png?raw=true)
+
+Troubleshooting
+---------------
+
+**Q**: I updated template (such as a tempate parameter name) but it was not taking effect in the pipeline that uses this
+template.
+
+**A**: This is because the pipeline is still referencing the old template definition. Note that when template is 
+republished, it doesn't automatically refresh the pipeline that uses this template. There are 2 approaches for solving
+this problem:
+
+1. Simply delete and recreate the pipeline to pick up the updated template definition
+2. Re-sync pipeline by navigating to **Options** tab of the pipeline UI and then click sync button next to the 
+   **Pipeline** in **Sync** section (shown below). _Lastly_, refresh the pipeline **Builds** page.
+
+  <div align="center">
+
+  <img width="70%" src="https://github.com/QubitPi/QubitPi/blob/master/img/resync-pipeline.png?raw=true" />
+
+  </div>
 
 License
 -------
@@ -80,10 +100,6 @@ The use and distribution terms for [Machine Learning model release definition te
 [Apache License badge]: https://img.shields.io/badge/Apache%202.0-F25910.svg?style=for-the-badge&logo=Apache&logoColor=white
 [Apache License URL]: https://www.apache.org/licenses/LICENSE-2.0
 [Apache License, Version 2.0]: http://www.apache.org/licenses/LICENSE-2.0.html
-[AWS AMI]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html
-[AWS EC2 instance type]: https://aws.amazon.com/ec2/instance-types/
-[AWS regions]: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html#Concepts.RegionsAndAvailabilityZones.Availability
-[AWS Security Group]: https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html
 
 [dedicated page for ELK deployment support]: https://qubitpi.github.io/hashicorp-aws/docs/elk
 [elk-release-definition-template]: https://github.com/QubitPi/elk-release-definition-template
@@ -95,10 +111,8 @@ The use and distribution terms for [Machine Learning model release definition te
 [hashicorp-aws]: https://qubitpi.github.io/hashicorp-aws/
 [HashiCorp Packer badge]: https://img.shields.io/badge/Packer-02A8EF?style=for-the-badge&logo=Packer&logoColor=white
 [HashiCorp Packer URL]: https://qubitpi.github.io/hashicorp-packer/packer/docs
-[HashiCorp Packer Variables]: https://qubitpi.github.io/hashicorp-aws/docs/elk#defining-packer-variables
 [HashiCorp Terraform badge]: https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white
 [HashiCorp Terraform URL]: https://qubitpi.github.io/hashicorp-terraform/terraform/docs
-[HashiCorp Terraform Variables]: https://qubitpi.github.io/hashicorp-aws/docs/elk#defining-terraform-variables
 
 [Immutable Infrastructure]: https://www.hashicorp.com/resources/what-is-mutable-vs-immutable-infrastructure
 
