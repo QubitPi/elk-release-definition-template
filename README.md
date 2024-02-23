@@ -11,6 +11,12 @@ A [Screwdriver CD template] that deploys [immutable][Immutable Infrastructure] i
 [screwdriver-template-main npm package] to assist with template validation, publishing, and tagging. The template tags
 the latest versions with the `latest` tag.
 
+<div align="center">
+
+<img width="60%" src="https://github.com/QubitPi/hashicorp-aws/blob/master/docs/docs/img/elk-deployment-diagram.png?raw=true" />
+
+</div>
+
 > [!TIP]
 > [ELK Release Definition Template][elk-release-definition-template] is a satellite project of [hashicorp-aws] and more
 > documentation can be found in its [dedicated page for ELK deployment support]
@@ -42,8 +48,6 @@ The following [Screwdriver CD Secrets] needs to be defined before running the pi
   instance. This is the same as the `SSL_CERTIFICATE` from the [general SSL setup of hashicorp-aws]
 - `SSL_CERTIFICATE_KEY` - the content of SSL certificate key file serving HTTPS-enabled DNS name of the EC2 hosting our
   ELK instance. This is the same as the `SSL_CERTIFICATE_KEY` from the [general SSL setup of hashicorp-aws]
-- `NGINX_SSL_CONFIG_FILE` - the content of Nginx config file serving as the reverse proxy for the aforementioned
-  SSL/HTTPS support
 
 To run the pipeline, fill in the AWS-related **parameters** first
 
