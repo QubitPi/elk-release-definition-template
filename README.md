@@ -72,8 +72,8 @@ Then hit "**Submit**" to start deploying.
 Troubleshooting
 ---------------
 
-**Q**: I updated template (such as a tempate parameter name) but it was not taking effect in the pipeline that uses this
-template.
+**Q**: I updated template (such as a template parameter name) but it was not taking effect in the pipeline that uses 
+this template.
 
 **A**: This is because the pipeline is still referencing the old template definition. Note that when template is 
 republished, it doesn't automatically refresh the pipeline that uses this template. There are 2 approaches for solving
@@ -92,8 +92,7 @@ this problem:
 License
 -------
 
-The use and distribution terms for [Machine Learning model release definition template] are covered by the
-[Apache License, Version 2.0].
+The use and distribution terms for [elk-release-definition-template] are covered by the [Apache License, Version 2.0].
 
 <div align="center">
     <a href="https://opensource.org/licenses">
