@@ -49,19 +49,17 @@ config:
   steps:
     - install-packer: sd-cmd exec QubitPi/install-hashicorp-packer-ubuntu@latest
     - install-terraform: sd-cmd exec QubitPi/install-hashicorp-terraform-ubuntu@latest
-
-    - setup-hashicorp-deployment-tool: git clone --depth 1 https://github.com/QubitPi/hashicorp-aws.git ../hashicorp-aws
+    - checkout-hashicorp-deployment-tool: git clone --depth 1 https://github.com/QubitPi/hashicorp-aws.git ../hashicorp-aws
 
     - load-ssl-certificate-file: echo "$SSL_CERTIFICATE" > ../hashicorp-aws/hashicorp/elk/images/ssl.crt
     - load-ssl-certificate-key-file: echo "$SSL_CERTIFICATE_KEY" > ../hashicorp-aws/hashicorp/elk/images/ssl.key
     - configure-nginx-ssl: sed -i -e "s/elk.domain.com/$(meta get parameters.elk-domain.value)/g" ../hashicorp-aws/hashicorp/elk/images/nginx-ssl.conf
 
     - load-packer-variable-file: |
-        echo aws_image_region           = \"$(meta get parameters.aws-image-region.value)\" >> ../hashicorp-aws/hashicorp/elk/images/aws.auto.pkrvars.hcl
-        echo ami_name                   = \"$(meta get parameters.ami-name.value)\"         >> ../hashicorp-aws/hashicorp/elk/images/aws.auto.pkrvars.hcl
-        echo ssl_cert_file_path         = \"ssl.crt\"                                       >> ../hashicorp-aws/hashicorp/elk/images/aws.auto.pkrvars.hcl
-        echo ssl_cert_key_file_path     = \"ssl.key\"                                       >> ../hashicorp-aws/hashicorp/elk/images/aws.auto.pkrvars.hcl
-        echo ssl_nginx_config_file_path = \"nginx-ssl.conf\"                                >> ../hashicorp-aws/hashicorp/elk/images/aws.auto.pkrvars.hcl
+        echo aws_image_region       = \"$(meta get parameters.aws-image-region.value)\" >> ../hashicorp-aws/hashicorp/elk/images/aws.auto.pkrvars.hcl
+        echo ami_name               = \"$(meta get parameters.ami-name.value)\"         >> ../hashicorp-aws/hashicorp/elk/images/aws.auto.pkrvars.hcl
+        echo ssl_cert_file_path     = \"ssl.crt\"                                       >> ../hashicorp-aws/hashicorp/elk/images/aws.auto.pkrvars.hcl
+        echo ssl_cert_key_file_path = \"ssl.key\"                                       >> ../hashicorp-aws/hashicorp/elk/images/aws.auto.pkrvars.hcl
 
     - load-terraform-variable-file: |
         echo aws_deploy_region = \"$(meta get parameters.aws-deploy-region.value)\" >> ../hashicorp-aws/hashicorp/elk/instances/aws.auto.tfvars
