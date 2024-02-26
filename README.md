@@ -13,7 +13,7 @@ the latest versions with the `latest` tag.
 
 <div align="center">
 
-<img width="60%" src="https://github.com/QubitPi/hashicorp-aws/blob/master/docs/docs/img/elk-deployment-diagram.png?raw=true" />
+<img width="80%" src="https://github.com/QubitPi/hashicorp-aws/blob/master/docs/docs/img/elk-deployment-diagram.png?raw=true" />
 
 </div>
 
@@ -22,10 +22,10 @@ the latest versions with the `latest` tag.
 > documentation can be found in its [dedicated page for ELK deployment support]
 > <img src="https://github.com/QubitPi/QubitPi/blob/master/img/8%E5%A5%BD.gif?raw=true" height="40px"/>
 
-How to Use the Templates
+How to Use This Template
 ------------------------
 
-> [!TIP]
+> [!NOTE]
 > Before preceding, please note that it is assumed [the template](./templates/sd-template.yaml) have already been
 > installed in Screwdriver. If not, please see documentation on [publishing a template in Screwdriver]
 
