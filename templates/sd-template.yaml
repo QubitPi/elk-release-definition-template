@@ -53,7 +53,52 @@ config:
 
     - load-ssl-certificate-file: echo "$SSL_CERTIFICATE" > ../hashicorp-aws/hashicorp/elk/images/ssl.crt
     - load-ssl-certificate-key-file: echo "$SSL_CERTIFICATE_KEY" > ../hashicorp-aws/hashicorp/elk/images/ssl.key
-    - configure-nginx-ssl: sed -i -e "s/elk.domain.com/$(meta get parameters.elk-domain.value)/g" ../hashicorp-aws/hashicorp/elk/images/nginx-ssl.conf
+    - load-nginx-ssl-config-file: |
+        ELK_DOMAIN=$(meta get parameters.elk-domain.value)
+        
+        cat  << EOF >>../hashicorp-aws/hashicorp/elk/images/nginx-ssl.conf
+        server {
+            listen 80 default_server;
+            listen [::]:80 default_server;
+        
+            root /var/www/html;
+        
+            index index.html index.htm index.nginx-debian.html;
+        
+            server_name _;
+        
+            location / {
+                try_files $uri $uri/ =404;
+            }
+        }
+        
+        server {
+            root /var/www/html;
+        
+            index index.html index.htm index.nginx-debian.html;
+            server_name $ELK_DOMAIN;
+        
+            location / {
+                proxy_pass http://localhost:5601;
+            }
+        
+            listen [::]:443 ssl ipv6only=on;
+            listen 443 ssl;
+            ssl_certificate /etc/ssl/certs/server.crt;
+            ssl_certificate_key /etc/ssl/private/server.key;
+        }
+        
+        server {
+            if ($host = $ELK_DOMAIN) {
+                return 301 https://$host$request_uri;
+            }
+        
+            listen 80 ;
+            listen [::]:80 ;
+            server_name $ELK_DOMAIN;
+            return 404;
+        }
+        EOF
 
     - load-packer-variable-file: |
         echo ami_region             = \"$(meta get parameters.ami-region.value)\" >> ../hashicorp-aws/hashicorp/elk/images/aws.auto.pkrvars.hcl
